@@ -22,7 +22,8 @@ import  aguaImg from './assets/agua.png';
       <Text style={styles.titulo}>Reporte de Fugas</Text>
       <StatusBar style="auto" />
 
-      <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate('Reporte')}>
+      <TouchableOpacity style={styles.boton} 
+        onPress={() => navigation.navigate('Reporte')}>
         <Text style={styles.tituloBtn}> Crear Reporte</Text>
       </TouchableOpacity>
 
@@ -36,6 +37,12 @@ import  aguaImg from './assets/agua.png';
 return (
   <View style={styles.containerReporte}>
   <Text style={styles.tituloVentana2}> Crea tu Reporte</Text>
+
+
+  <TouchableOpacity style={styles.botonEnviar} 
+    onPress={() => console.log("works")}>
+    <Text style={styles.tituloBtn}> Enviar Reporte</Text>
+  </TouchableOpacity>
   </View>
   );
 }
@@ -47,9 +54,17 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="INCO 2021" component={Login} />
-        <Stack.Screen name="Reporte" component={Reporte} />
+      <Stack.Navigator initialRouteName="INCO 2021">
+        <Stack.Screen name="INCO 2021" component={Login} options={{
+          headerStyle: {
+            backgroundColor: '#A2D5F2',
+          }
+        }}/>
+        <Stack.Screen name="Reporte" component={Reporte}   options={{
+          headerStyle: {
+            backgroundColor: '#A2D5F2',
+          }
+        }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -95,6 +110,12 @@ const styles = StyleSheet.create({
   boton: {
     backgroundColor: '#000',
     padding: 20,
+    marginTop: 100,
+    borderRadius: 10
+  },
+  botonEnviar: {
+    backgroundColor: '#000',
+    padding: 10,
     marginTop: 100,
     borderRadius: 10
   }
