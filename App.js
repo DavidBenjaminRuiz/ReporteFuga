@@ -6,6 +6,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker'
 
+import { RadioButton } from 'react-native-paper';
+
 import  aguaImg from './assets/agua.png';
 import  noFotoImg from './assets/no-photos.png';
 
@@ -35,10 +37,11 @@ import  noFotoImg from './assets/no-photos.png';
 }
 ///////////////////Reporte//////////////////////////
 
-function Reporte(){
+function Reporte({navigation}){
   const [direccionFuga, onChangeDireccion]= React.useState("")
   const [comentarios, onChangeComentarios]= React.useState("")
   const [selectedImage, setSelectedImage]= React.useState(null)
+  const [actual, setActual] = React.useState("Moderada")
 
   let openImagePicker= async () =>{
 
@@ -54,6 +57,12 @@ function Reporte(){
     setSelectedImage({localUri: imgPickeada.uri});
   }  
 
+  const enviarReporte= ()=>{
+    alert('Reporte enviado con exito')
+    console.log(actual)
+    navigation.navigate('INCO 2021')
+  }
+
 return (
   <View style={styles.containerReporte}>
   <Text style={styles.tituloVentana2}> Crea tu Reporte</Text>
@@ -65,6 +74,21 @@ return (
     value={direccionFuga}
 
   />
+
+<Text style={styles.tituloVentana2}>Gravedad de la fuga </Text>
+
+  <RadioButton.Group onValueChange={actual => setActual(actual)} value={actual}>
+      <View>
+        <Text>Grave</Text>
+        <RadioButton value="Grave" />
+      </View>
+      <View>
+        <Text>Moderada</Text>
+        <RadioButton value="Moderada" />
+      </View>
+    </RadioButton.Group>
+
+
   <TextInput 
     style={styles.inputs}
     placeholder= "Observaciones adicionales"
@@ -72,8 +96,6 @@ return (
     value={comentarios }
     keyboardType= 'ascii-capable'
     multiline
-     
-
   />
 
   <Image
@@ -89,7 +111,7 @@ return (
   />
 
   <TouchableOpacity style={styles.botonEnviar} 
-    onPress={() => console.log(direccionFuga, comentarios)}>
+    onPress={enviarReporte}>
     <Text style={styles.tituloBtn}> Enviar Reporte</Text>
   </TouchableOpacity>
   </View>
@@ -165,7 +187,7 @@ const styles = StyleSheet.create({
   botonEnviar: {
     backgroundColor: '#000',
     padding: 10,
-    marginTop: 100,
+    marginTop: 50,
     borderRadius: 10
   },
   inputs: {
@@ -180,6 +202,9 @@ const styles = StyleSheet.create({
     width:150,
     height:150,
     marginTop: 20
+  },
+  radioButton: {
+    padding:10
   }
 });
 
