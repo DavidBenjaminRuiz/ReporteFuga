@@ -5,19 +5,17 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, Button } fr
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker'
-
 import { RadioButton } from 'react-native-paper';
-
+import * as MailComposer from 'expo-mail-composer';
 import  aguaImg from './assets/agua.png';
 import  noFotoImg from './assets/no-photos.png';
 
 
 //////////////////Login/////////////////////
 
- function Login( {navigation}) {
+function Login( {navigation}) {
 
-  return (
-   
+  return (   
     <View style={styles.container}>
       <Image
         source={aguaImg}
@@ -43,6 +41,7 @@ function Reporte({navigation}){
   const [selectedImage, setSelectedImage]= React.useState(null)
   const [actual, setActual] = React.useState("Moderada")
 
+  //Modulo para cargar una img de la galeria
   let openImagePicker= async () =>{
 
     let permisos= await ImagePicker.requestMediaLibraryPermissionsAsync()
@@ -57,8 +56,13 @@ function Reporte({navigation}){
     setSelectedImage({localUri: imgPickeada.uri});
   }  
 
+
+
+  //Funcion que se ejecuta cuando se envia el reporte
   const enviarReporte= ()=>{
     alert('Reporte enviado con exito')
+    console.log(direccionFuga)
+    console.log(comentarios)
     console.log(actual)
     navigation.navigate('INCO 2021')
   }
@@ -80,11 +84,11 @@ return (
   <RadioButton.Group onValueChange={actual => setActual(actual)} value={actual}>
       <View>
         <Text>Grave</Text>
-        <RadioButton value="Grave" />
+        <RadioButton value="Grave"  color= "#82d5f2"/>
       </View>
       <View>
         <Text>Moderada</Text>
-        <RadioButton value="Moderada" />
+        <RadioButton value="Moderada" color= "#82d5f2" />
       </View>
     </RadioButton.Group>
 
@@ -93,8 +97,8 @@ return (
     style={styles.inputs}
     placeholder= "Observaciones adicionales"
     onChangeText={onChangeComentarios}
-    value={comentarios }
-    keyboardType= 'ascii-capable'
+    value={comentarios}
+    keyboardType= 'default'
     multiline
   />
 
@@ -111,7 +115,12 @@ return (
   />
 
   <TouchableOpacity style={styles.botonEnviar} 
-    onPress={enviarReporte}>
+    onPress={()=>{MailComposer.composeAsync({
+      recipients: ['davidmw4@hotmail.com'], // array of email addresses
+      subject: 'Fuga en: ' + direccionFuga,
+      body: 'Gravedad: ' + actual +  '\n' + 'Comentarios adicionales: ' + comentarios,
+      attachments: [selectedImage.localUri],
+    })}}>
     <Text style={styles.tituloBtn}> Enviar Reporte</Text>
   </TouchableOpacity>
   </View>
@@ -165,18 +174,15 @@ const styles = StyleSheet.create({
   titulo: {
     marginTop: 15,
     fontSize: 30,
-    fontFamily: 'Inter_400Regular',
   },
   tituloVentana2: {
     marginTop: 15,
     fontSize: 25,
-    fontFamily: 'Inter_400Regular'
   },
   tituloBtn: {
     
     fontSize: 20,
     color: 'white',
-    fontFamily: 'Inter_400Regular'
   },
   boton: {
     backgroundColor: '#000',
