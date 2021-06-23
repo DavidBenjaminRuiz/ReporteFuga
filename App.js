@@ -8,7 +8,8 @@ import * as ImagePicker from 'expo-image-picker'
 import { RadioButton } from 'react-native-paper';
 import * as MailComposer from 'expo-mail-composer';
 import  aguaImg from './assets/agua.png';
-import  noFotoImg from './assets/no-photos.png';
+import  noFotoImg from './assets/no-photos.jpg';
+const imagenDefaultUri = Image.resolveAssetSource(noFotoImg).uri
 
 
 //////////////////Login/////////////////////
@@ -106,7 +107,7 @@ return (
     style={styles.fotoFuga}
     source={{
       uri:
-      selectedImage !== null ? selectedImage.localUri : "/assets/no-photos.png",
+      selectedImage !== null ? selectedImage.localUri : imagenDefaultUri,
     }}
   />
   <Button
@@ -118,9 +119,13 @@ return (
     onPress={()=>{MailComposer.composeAsync({
       recipients: ['davidmw4@hotmail.com'], // array of email addresses
       subject: 'Fuga en: ' + direccionFuga,
-      body: 'Gravedad: ' + actual +  '\n' + 'Comentarios adicionales: ' + comentarios,
-      attachments: [selectedImage.localUri],
-    })}}>
+      body: 'Gravedad de la fuga: ' + actual +  '\n' + 'Comentarios adicionales: ' + comentarios,
+      attachments: [selectedImage !== null ? selectedImage.localUri : ""], 
+    }).catch((err)=>{
+      alert("Para comprobar la veracidad del reporte selecciona una imagen porfavor");
+    }).then(navigation.navigate('INCO 2021'))
+    
+  }}>
     <Text style={styles.tituloBtn}> Enviar Reporte</Text>
   </TouchableOpacity>
   </View>
